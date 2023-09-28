@@ -80,7 +80,13 @@ Você pode executar a aplicação usando o Docker. Certifique-se de ter o Docker
 1. Construa as imagens e inicie os containers:
 
 ```bash
-docker-compose up
+docker-compose up -d
 ```
 
 2. Acesse a API em `http://localhost:3000`.
+
+3. Execute os testes:
+
+```bash
+docker exec -it stock-app npm test
+```
