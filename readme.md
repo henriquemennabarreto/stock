@@ -34,16 +34,51 @@ npm start
 
 ## Requests
 
+1. **Listar todos os usuários**
+```bash
+curl -X GET http://localhost:3000/users
+```
+
+2. **Obter um usuário específico pelo ID**
+```bash
+curl -X GET http://localhost:3000/users/1
+```
+
+3. **Adicionar um novo usuário**
+```bash
+curl -X POST http://localhost:3000/users \
+     -H "Content-Type: application/json" \
+     -d '{
+           "name": "John Doe",
+           "email": "john.doe@example.com",
+           "password": "secret123"
+         }'
+```
+
+4. **Atualizar um usuário específico pelo ID**
+```bash
+curl -X PUT http://localhost:3000/users/1 \
+     -H "Content-Type: application/json" \
+     -d '{
+           "name": "Jane Doe",
+           "email": "jane.doe@example.com"
+         }'
+```
+
+5. **Deletar um usuário específico pelo ID**
+```bash
+curl -X DELETE http://localhost:3000/users/1
+```
+
+
 ```bash
 curl --request GET \
   --url http://localhost:3000/stock \
-  --header 'User-Agent: insomnia/8.0.0'
 ```
 
 ```bash
 curl --request GET \
   --url http://localhost:3000/stock/1 \
-  --header 'User-Agent: insomnia/8.0.0'
 ```
 
 ```bash
