@@ -1,9 +1,8 @@
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const UserModel = require('../models/userModel');
 
 const SECRET = '448a852e-c164-4986-9e01-01fa7ea9e0ad';
-
 
 const AuthController = {
 
