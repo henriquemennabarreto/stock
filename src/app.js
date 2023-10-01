@@ -1,4 +1,6 @@
 const express = require('express');
+
+const userRoutes = require('./routes/userRoutes');
 const stockRoutes = require('./routes/stockRoutes');
 
 const app = express();
@@ -7,10 +9,9 @@ const knex = require('knex');
 const knexConfig = require('./config/knexfile');
 const db = knex(knexConfig);
 
-// Middleware para processar dados JSON
 app.use(express.json());
 
-// Rotas relacionadas ao estoque
+app.use(userRoutes);
 app.use(stockRoutes);
 
 // Rota de teste
