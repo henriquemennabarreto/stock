@@ -28,6 +28,28 @@ const AuthController = {
     } catch (error) {
       res.status(500).json({ message: "Erro ao gerar o token.", error });
     }
+  },
+
+  verifyToken: async (req, res, next) => {
+    try {
+      const token = req.headers['x-access-token'] || req.headers['authorization'];
+
+      if (!token) {
+        return res.status(403).json({ message: "Nenhum token fornecido." });
+      }
+
+      if (token.startsWith('Bearer ')) {
+        token = token.slice(7, token.length);
+      }
+
+      const decoded = jwt.verify(token, SECRET);
+
+      req.userId = decoded.id;
+
+      next();
+    } catch (error) {
+      res.status(401).json({ message: "Não autorizado.", error });
+    }
   }
 };
 

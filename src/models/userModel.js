@@ -6,6 +6,8 @@ const db = knex(knexConfig);
 const tableName = 'users';
 
 const UserModel = {
+  getUserByEmail: (email) => db(tableName).where('email', email).first(),
+
   // Buscar todos os usuários
   getAllUsers: () => db(tableName).select('*'),
 
