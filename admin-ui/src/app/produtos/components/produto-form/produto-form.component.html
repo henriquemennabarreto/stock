@@ -1,0 +1,99 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/produtos"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      {{ currentProduto ? 'Editar Produto' : 'Novo Produto' }}
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div fxLayout="column" fxLayoutAlign="start wrap" fxLayoutGap="1.5rem" class="page-container">
+    
+    <form [formGroup]="produtoForm" (ngSubmit)="onSubmit()" fxLayout="column" fxLayoutAlign="center wrap" fxLayoutGap="1.5rem">
+      
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Informações do Produto</ion-card-title>
+        </ion-card-header>
+        <ion-card-content fxLayout="column" fxLayoutAlign="center wrap" fxLayoutGap=".5rem">
+          <mat-form-field appearance="outline">
+            <mat-label>Nome do Produto</mat-label>
+            <input matInput formControlName="nome">
+          </mat-form-field>
+          
+          <mat-form-field appearance="outline">
+            <mat-label>Tipo do Produto</mat-label>
+            <input matInput formControlName="tipo">
+          </mat-form-field>
+        </ion-card-content>
+      </ion-card>
+      
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Informações de Insumo</ion-card-title>
+        </ion-card-header>
+        <ion-card-content fxLayout="column" fxLayoutAlign="center wrap" fxLayoutGap=".5rem">
+          <mat-form-field appearance="outline">
+            <mat-label>ID do Insumo</mat-label>
+            <input matInput formControlName="insumoId">
+          </mat-form-field>
+          
+          <mat-form-field appearance="outline">
+            <mat-label>Nome do Insumo</mat-label>
+            <input matInput formControlName="insumoNome">
+          </mat-form-field>
+        </ion-card-content>
+      </ion-card>
+      
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Informações de Estoque</ion-card-title>
+        </ion-card-header>
+        <ion-card-content fxLayout="column" fxLayoutAlign="center wrap" fxLayoutGap=".5rem">
+          <mat-form-field appearance="outline">
+            <mat-label>Quantidade em Estoque</mat-label>
+            <input matInput formControlName="quantidadeEstoque">
+          </mat-form-field>
+        </ion-card-content>
+      </ion-card>
+      
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Informações do Lote de Produção</ion-card-title>
+        </ion-card-header>
+        <ion-card-content fxLayout="column" fxLayoutAlign="center wrap" fxLayoutGap=".5rem">
+          <mat-form-field appearance="outline">
+            <mat-label>Data de Produção</mat-label>
+            <input matInput type="date" formControlName="dataProducao">
+          </mat-form-field>
+          
+          <mat-form-field appearance="outline">
+            <mat-label>Data de Validade</mat-label>
+            <input matInput type="date" formControlName="dataValidade">
+          </mat-form-field>
+          
+          <mat-form-field appearance="outline">
+            <mat-label>Quantidade no Lote</mat-label>
+            <input matInput formControlName="quantidadeLote">
+          </mat-form-field>
+        </ion-card-content>
+      </ion-card>
+      
+      <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="0.5rem">
+        <ion-button routerLink="/produtos" color="light">
+          <ion-icon slot="start" name="arrow-back-outline"></ion-icon>
+          Voltar
+        </ion-button>
+        <ion-button color="primary" type="submit" [disabled]="produtoForm.invalid || produtoForm.pristine">
+          {{ currentProduto ? 'Atualizar Produto' : 'Criar Produto' }}
+        </ion-button>
+      </div>
+      
+    </form>
+    
+  </div>
+</ion-content>
+

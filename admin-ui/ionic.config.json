@@ -1,0 +1,7 @@
+{
+  "name": "pedramoura-frontend",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
