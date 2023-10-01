@@ -1,4 +1,5 @@
 const UserModel = require('../models/userModel');
+const bcrypt = require('bcryptjs');
 
 const UserController = {
   getAllUsers: async (req, res) => {
@@ -28,6 +29,10 @@ const UserController = {
   addUser: async (req, res) => {
     try {
       const newUser = req.body;
+
+      const saltRounds = 10;
+      newUser.password = await bcrypt.hash(newUser.password, saltRounds);
+
       const [userId] = await UserModel.addUser(newUser);
 
       const user = await UserModel.getUserById(userId);
@@ -35,6 +40,8 @@ const UserController = {
       if (!user) {
         return res.status(404).json({ message: "Usuário não encontrado." });
       }
+
+      delete user.password;
 
       res.status(201).json({ user });
     } catch (error) {
