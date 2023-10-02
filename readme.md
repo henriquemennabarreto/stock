@@ -34,6 +34,8 @@ npm start
 
 ## Requests
 
+### Usuário
+
 1. **Listar todos os usuários**
 ```bash
 curl -X GET http://localhost:3000/users
@@ -70,21 +72,39 @@ curl -X PUT http://localhost:3000/users/1 \
 curl -X DELETE http://localhost:3000/users/1
 ```
 
+### Login
+```bash
+curl --request POST \
+  --url http://localhost:3000/users/login \
+  --header 'Content-Type: application/json' \
+  --data '{
+	"email": "john.doe@example.com",
+  "password": "secret123"
+}'
+```
 
+### Estoque
+
+1. **Listar todos os itens do estoque**
 ```bash
 curl --request GET \
   --url http://localhost:3000/stock \
+  --header 'authorization: Bearer <TOKEN>'
 ```
 
+2. **Obter um item específico pelo ID**
 ```bash
 curl --request GET \
   --url http://localhost:3000/stock/1 \
+  --header 'authorization: Bearer <TOKEN>'
 ```
 
+3. **Adicionar um novo item**
 ```bash
 curl --request POST \
   --url http://localhost:3000/stock \
   --header 'Content-Type: application/json' \
+  --header 'authorization: Bearer <TOKEN>' \
   --data '{
   "name": "Carne Bovina",
   "quantity": 10,
@@ -92,10 +112,12 @@ curl --request POST \
 }'
 ```
 
+4. **Atualizar um item específico pelo ID**
 ```bash
 curl --request PUT \
   --url http://localhost:3000/stock/1 \
   --header 'Content-Type: application/json' \
+  --header 'authorization: Bearer <TOKEN>' \
   --data '{
   "name": "Frango",
   "quantity": 5,
@@ -103,9 +125,11 @@ curl --request PUT \
 }'
 ```
 
+5. **Deletar um item específico pelo ID**
 ```bash
 curl --request DELETE \
-  --url http://localhost:3000/stock/1
+  --url http://localhost:3000/stock/1 \
+  --header 'authorization: Bearer <TOKEN>'
 ```
 
 ## Docker
