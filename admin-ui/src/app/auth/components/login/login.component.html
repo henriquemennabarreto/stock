@@ -1,0 +1,39 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-title>
+        Login
+      </ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content>
+    <div fxLayout="column" fxLayoutAlign="start wrap" fxLayoutGap="1.5rem" class="page-container">
+      
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <ion-card>
+          <ion-card-content fxLayout="column" fxLayoutAlign="center wrap" fxLayoutGap=".5rem">
+            <mat-form-field appearance="outline">
+              <mat-label>E-mail</mat-label>
+              <input matInput formControlName="email" type="email">
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline">
+              <mat-label>Senha</mat-label>
+              <input matInput formControlName="password" type="password">
+            </mat-form-field>
+          </ion-card-content>
+        </ion-card>
+        
+        <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="0.5rem">
+          <ion-button color="light" routerLink="/auth/register">
+            Cadastre-se
+          </ion-button>
+          <ion-button color="primary" type="submit" [disabled]="loginForm.invalid || loginForm.pristine">
+            Entrar
+          </ion-button>
+        </div>
+      </form>
+      
+    </div>
+  </ion-content>
+  

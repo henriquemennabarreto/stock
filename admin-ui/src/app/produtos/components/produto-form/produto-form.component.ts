@@ -75,7 +75,6 @@ export class ProdutoFormComponent implements ViewDidEnter, CanDeactivate<Produto
   }
 
   ionViewDidLeave(): void {
-    console.log('will reset')
     this.store.dispatch(ProdutoActions.resetCurrentProduto());
     this.subscriptions.forEach(subscription => {
       subscription.unsubscribe();

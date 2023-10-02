@@ -1,23 +1,25 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
 import * as ProdutoReducer from '../../store/produto.reducer';
 import * as ProdutoActions from '../../store/produto.actions';
 import * as ProdutoSelectors from '../../store/produto.selectors'; 
-import { AlertController, LoadingController, ViewDidEnter } from '@ionic/angular';
+import { AlertController, LoadingController, ViewDidEnter, ViewDidLeave } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-lista-produtos',
   templateUrl: './lista-produtos.component.html',
   styleUrls: ['lista-produtos.component.scss']
 })
-export class ListaProdutosComponent implements ViewDidEnter {
+export class ListaProdutosComponent implements AfterViewInit, ViewDidEnter, ViewDidLeave {
 
   public produtos$: Observable<any[]>;
   public isLoading$: Observable<boolean>;
   public loadingElement: any;
+  private subscriptions: Subscription[] = [];
 
   constructor(
     private store: Store<ProdutoReducer.ProdutoState>,
@@ -27,21 +29,36 @@ export class ListaProdutosComponent implements ViewDidEnter {
     this.produtos$ = this.store.select(ProdutoSelectors.selectAllProdutos);
     this.isLoading$ = this.store.select(ProdutoSelectors.selectLoading);
     
+    this.loadingController.create({
+      message: 'Carregando...',
+    }).then(loadingElement => {
+      this.loadingElement = loadingElement;
+    });
+  }
+
+  ngAfterViewInit(): void {
     this.isLoading$.subscribe(async isLoading => {
-      if (isLoading && !this.loadingElement) {
-        this.loadingElement = await this.loadingController.create({
-          message: 'Carregando...',
-        });
+      if(!this.loadingElement) {
+        return;
+      }
+      if (isLoading) {
         await this.loadingElement.present();
-      } else if (!isLoading && this.loadingElement) {
+      } else {
         await this.loadingElement.dismiss();
-        this.loadingElement = null;
       }
     });
   }
 
   ionViewDidEnter(): void {
     this.onRefresh();
+  }
+
+  ionViewDidLeave(): void {
+    this.store.dispatch(ProdutoActions.resetCurrentProduto());
+    this.subscriptions.forEach(subscription => {
+      subscription.unsubscribe();
+    });
+    this.subscriptions = [];
   }
 
   onRefresh(): void {
