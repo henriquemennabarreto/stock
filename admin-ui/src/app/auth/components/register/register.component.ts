@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import * as AuthActions from '../../store/auth.actions';
@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnDestroy {
   public registerForm: FormGroup;
   private subscriptions: Subscription[] = [];
   public submitting = false;
@@ -45,6 +45,7 @@ export class RegisterComponent {
       this.presentToast('Por favor, revise os campos');
       return;
     }
+
     this.submitting = true;
     let userData = {
       name: this.registerForm.value.name,
@@ -53,17 +54,21 @@ export class RegisterComponent {
     };
     this.store.dispatch(AuthActions.createUser({ user: userData }));
     
-    this.authEffects.createUserSuccessNotification().subscribe(() => {
-      this.submitting = false;
-      this.presentToast('Registro realizado com sucesso');
-      this.presentAlert('Registro bem-sucedido', 'Seu registro foi concluído com sucesso. Você pode fazer login agora.');
-      this.router.navigate(['/auth/login']);
-    });
+    this.subscriptions.push(
+        this.authEffects.createUserSuccessNotification().subscribe(() => {
+        this.submitting = false;
+        this.presentToast('Registro realizado com sucesso');
+        this.presentAlert('Registro bem-sucedido', 'Seu registro foi concluído com sucesso. Você pode fazer login agora.');
+        this.router.navigate(['/auth/login']);
+      })
+    );
 
-    this.authEffects.createUserFailureNotification().subscribe(() => {
-      this.submitting = false;
-      this.presentToast('Ocorreu um erro ao criar a conta.');
-    });
+    this.subscriptions.push(
+      this.authEffects.createUserFailureNotification().subscribe(() => {
+        this.submitting = false;
+        this.presentToast('Ocorreu um erro ao criar a conta.');
+      })
+    );
   }
 
   passwordMatchValidator(formGroup: FormGroup): void {

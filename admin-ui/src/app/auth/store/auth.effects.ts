@@ -4,6 +4,7 @@ import { of } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import * as AuthActions from './auth.actions';
 import { AuthService } from '../services/auth.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable()
 export class AuthEffects {
@@ -96,6 +97,34 @@ export class AuthEffects {
   updateUserFailureNotification() {
     return this.actions$.pipe(
       ofType(AuthActions.updateUserFailure),
+      tap(() => {
+      })
+    );
+  }
+
+  login$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.login),
+      switchMap((action) =>
+        this.authService.loginUser({ email: action.email, password: action.password }).pipe(
+          map((response) => AuthActions.loginSuccess({ token: response.token })),
+          catchError((error: HttpErrorResponse) => of(AuthActions.loginFailure({ error: error?.error?.message })))
+        )
+      )
+    )
+  );
+
+  loginSuccessNotification() {
+    return this.actions$.pipe(
+      ofType(AuthActions.loginSuccess),
+      tap(() => {
+      })
+    );
+  }
+
+  loginFailureNotification() {
+    return this.actions$.pipe(
+      ofType(AuthActions.loginFailure),
       tap(() => {
       })
     );
