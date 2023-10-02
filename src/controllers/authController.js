@@ -32,7 +32,7 @@ const AuthController = {
 
   verifyToken: async (req, res, next) => {
     try {
-      const token = req.headers['x-access-token'] || req.headers['authorization'];
+      let token = req.headers['x-access-token'] || req.headers['authorization'];
 
       if (!token) {
         return res.status(403).json({ message: "Nenhum token fornecido." });
