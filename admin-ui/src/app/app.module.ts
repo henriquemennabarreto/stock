@@ -1,4 +1,4 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA, LOCALE_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
@@ -13,6 +13,10 @@ import * as fromRoot from './store/reducers';
 import { EffectsModule } from '@ngrx/effects';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthJwtInterceptor } from './auth/jwt.interceptor';
+import { registerLocaleData } from '@angular/common';
+import ptBr from '@angular/common/locales/pt';
+
+registerLocaleData(ptBr);
 
 
 @NgModule({
@@ -24,7 +28,7 @@ import { AuthJwtInterceptor } from './auth/jwt.interceptor';
     HttpClientModule,
     StoreModule.forRoot(fromRoot.reducers, { metaReducers: fromRoot.metaReducers }),
     EffectsModule.forRoot([]),
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
   ],
   providers: [
     {
@@ -35,6 +39,10 @@ import { AuthJwtInterceptor } from './auth/jwt.interceptor';
       provide: HTTP_INTERCEPTORS,
       useClass: AuthJwtInterceptor,
       multi: true,
+    },
+    {
+      provide: LOCALE_ID,
+      useValue: 'pt-BR'
     },
   ],
   bootstrap: [AppComponent],

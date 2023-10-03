@@ -15,7 +15,7 @@ export const initialState: ProdutoState = {
   isLoading: false
 };
 
-const _produtoReducer = createReducer(
+const produtoReducer = createReducer(
   initialState,
 
   on(ProdutoActions.loadProdutosSuccess, (state, { produtos }) => ({
@@ -67,6 +67,6 @@ const _produtoReducer = createReducer(
   })),
 );
 
-export function produtoReducer(state: ProdutoState | undefined, action: Action) {
-  return _produtoReducer(state, action);
+export function reducer(state: ProdutoState | undefined, action: Action) {
+  return produtoReducer(state, action);
 }

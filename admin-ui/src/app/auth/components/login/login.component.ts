@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import * as AuthActions from '../../store/auth.actions';
@@ -12,7 +12,7 @@ import { AuthEffects } from '../../store/auth.effects';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnDestroy {
+export class LoginComponent implements OnInit, OnDestroy {
   loginForm: FormGroup;
   private subscriptions: Subscription[] = [];
   public submitting = false;
@@ -29,20 +29,7 @@ export class LoginComponent implements OnDestroy {
     });
   }
 
-  onSubmit() {
-    if (this.submitting) {
-      this.presentToast('Por favor, aguarde');
-      return;
-    }
-    if (!this.loginForm.valid) {
-      this.presentToast('Por favor, revise os campos');
-      return;
-    }
-
-    this.submitting = true;
-    const { email, password } = this.loginForm.value;
-    this.store.dispatch(AuthActions.login({ email, password }));
-    
+  ngOnInit(): void {    
     this.subscriptions.push(
       this.authEffects.loginSuccessNotification().subscribe(() => {
         this.submitting = false;
@@ -57,6 +44,28 @@ export class LoginComponent implements OnDestroy {
       })
     );
   }
+  
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(subscription => {
+      subscription.unsubscribe();
+    });
+    this.subscriptions = [];
+  }
+
+  onSubmit() {
+    if (this.submitting) {
+      this.presentToast('Por favor, aguarde');
+      return;
+    }
+    if (!this.loginForm.valid) {
+      this.presentToast('Por favor, revise os campos');
+      return;
+    }
+
+    this.submitting = true;
+    const { email, password } = this.loginForm.value;
+    this.store.dispatch(AuthActions.login({ email, password }));
+  }
 
   async presentToast(message: string) {
     const toast = await this.toastController.create({
@@ -66,9 +75,5 @@ export class LoginComponent implements OnDestroy {
       color: 'danger',
     });
     toast.present();
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }

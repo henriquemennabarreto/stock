@@ -13,6 +13,7 @@ import { IonicModule } from '@ionic/angular';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ProdutoFormComponent } from './components/produto-form/produto-form.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 
 @NgModule({
   declarations: [
@@ -30,10 +31,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     IonicModule,
     FlexLayoutModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgxMaskDirective,
+    NgxMaskPipe
   ],
   providers: [
-    ProdutoService
+    ProdutoService,
+    provideNgxMask()
   ]
 })
 export class ProdutosModule { }

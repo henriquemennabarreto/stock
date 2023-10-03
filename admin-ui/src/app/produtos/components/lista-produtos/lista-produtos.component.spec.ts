@@ -1,11 +1,12 @@
 import { TestBed, ComponentFixture } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
 import { Store } from '@ngrx/store';
-import { of } from 'rxjs';
 import { ListaProdutosComponent } from './lista-produtos.component';
-import { AlertController, LoadingController } from '@ionic/angular';
+import { AlertController, IonicModule, LoadingController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import * as ProdutoActions from '../../store/produto.actions';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 describe('ListaProdutosComponent', () => {
     let component: ListaProdutosComponent;
@@ -17,6 +18,12 @@ describe('ListaProdutosComponent', () => {
     
     beforeEach(async () => {
         await TestBed.configureTestingModule({
+            imports: [
+                IonicModule,
+                ReactiveFormsModule,
+                MatFormFieldModule,
+                MatInputModule,
+            ],
             declarations: [ListaProdutosComponent],
             providers: [
                 { provide: Store, useValue: jasmine.createSpyObj('Store', ['select', 'dispatch']) },

@@ -38,8 +38,7 @@ export class ProdutoEffects {
     ofType(ProdutoActions.createProduto),
     switchMap(action => this.produtoService.create(action.produto).pipe(
       tap(() => this.store.dispatch(ProdutoActions.loadProdutos())),
-      // map(produto => ProdutoActions.createProdutoSuccess({ produto })),
-      map(produto => { console.log('createProdutoSuccess response', produto); return ProdutoActions.createProdutoSuccess({ produto }) }),
+      map(produto => ProdutoActions.createProdutoSuccess({ produto })),
       catchError(error => of(ProdutoActions.createProdutoFailure({ error })))
     ))
   ));
@@ -48,8 +47,7 @@ export class ProdutoEffects {
     ofType(ProdutoActions.updateProduto),
     switchMap(action => this.produtoService.update(action.produto).pipe(
       tap(() => this.store.dispatch(ProdutoActions.loadProdutos())),
-      // map(produto => ProdutoActions.updateProdutoSuccess({ produto })),
-      map(produto => { console.log('updateProdutoSuccess response', produto); return ProdutoActions.updateProdutoSuccess({ produto }) }),
+      map(produto => ProdutoActions.updateProdutoSuccess({ produto })),
       catchError(error => of(ProdutoActions.updateProdutoFailure({ error })))
     ))
   ));  

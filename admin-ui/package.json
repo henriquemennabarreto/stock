@@ -34,6 +34,8 @@
     "@ngrx/entity": "^16.2.0",
     "@ngrx/store": "^16.2.0",
     "ionicons": "^7.0.0",
+    "ngrx-store-localstorage": "^16.0.0",
+    "ngx-mask": "^16.3.8",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.13.0"
@@ -48,6 +50,7 @@
     "@angular/cli": "^16.0.0",
     "@angular/compiler-cli": "^16.0.0",
     "@angular/language-service": "^16.0.0",
+    "@angular/localize": "^16.2.7",
     "@capacitor/cli": "5.4.1",
     "@ionic/angular-toolkit": "^9.0.0",
     "@types/jasmine": "~4.3.0",

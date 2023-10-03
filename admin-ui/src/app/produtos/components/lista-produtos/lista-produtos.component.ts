@@ -14,7 +14,7 @@ import { IProduto } from '../../models/produto';
   templateUrl: './lista-produtos.component.html',
   styleUrls: ['lista-produtos.component.scss']
 })
-export class ListaProdutosComponent implements AfterViewInit, OnDestroy, ViewDidEnter, ViewDidLeave {
+export class ListaProdutosComponent implements AfterViewInit, OnDestroy, ViewDidEnter {
 
   public produtos$: Observable<IProduto[]>;
   public isLoading$: Observable<boolean>;
@@ -60,10 +60,6 @@ export class ListaProdutosComponent implements AfterViewInit, OnDestroy, ViewDid
 
   ionViewDidEnter(): void {
     this.onRefresh();
-  }
-
-  ionViewDidLeave(): void {
-    this.store.dispatch(ProdutoActions.resetCurrentProduto());
   }
 
   onRefresh(): void {

@@ -5,10 +5,16 @@ import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import * as AuthActions from './auth.actions';
 import { AuthService } from '../services/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class AuthEffects {
-  constructor(private actions$: Actions, private authService: AuthService) {}
+
+  constructor(
+    private actions$: Actions, 
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   loadUsers$ = createEffect(() =>
     this.actions$.pipe(
@@ -114,6 +120,14 @@ export class AuthEffects {
     )
   );
 
+  navigateAfterLogin$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.loginSuccess),
+      tap(() => this.router.navigate(['/produtos/lista']))
+    ),
+    { dispatch: false } 
+  );
+
   loginSuccessNotification() {
     return this.actions$.pipe(
       ofType(AuthActions.loginSuccess),
@@ -129,4 +143,5 @@ export class AuthEffects {
       })
     );
   }
+
 }

@@ -29,14 +29,9 @@ export class ProdutoFormComponent implements OnInit, OnDestroy, CanDeactivate<Pr
     private alertController: AlertController,
   ) {
     this.produtoForm = this.formBuilder.group({
-      nome: ['', Validators.required],
-      tipo: ['', Validators.required],
-      insumoId: ['', Validators.required],
-      insumoNome: ['', Validators.required],
-      quantidadeEstoque: ['', Validators.required],
-      dataProducao: ['', Validators.required],
-      dataValidade: ['', Validators.required],
-      quantidadeLote: ['', Validators.required]
+      name: ['', Validators.required],
+      price: [null, Validators.required],
+      quantity: [null, Validators.required],
     });
   }
 
@@ -44,8 +39,9 @@ export class ProdutoFormComponent implements OnInit, OnDestroy, CanDeactivate<Pr
     this.subscriptions.push(
       this.store.select(ProdutoSelectors.selectCurrentProduto).pipe(
       ).subscribe(produto => {
+        console.log('loadedproduto', produto)
         this.submitting = false;
-        this.currentProduto = produto ?? null;
+        this.currentProduto = produto || null;
         if (produto) {
           this.produtoForm.patchValue(produto);
         } else {
@@ -67,6 +63,7 @@ export class ProdutoFormComponent implements OnInit, OnDestroy, CanDeactivate<Pr
       this.route.params.subscribe(params => {
         const produtoId = params['id'];
         if (produtoId) {
+          console.log('loadproduto', produtoId)
           this.loadProduto(produtoId);
         }
       })
@@ -81,6 +78,7 @@ export class ProdutoFormComponent implements OnInit, OnDestroy, CanDeactivate<Pr
   }
 
   ionViewDidLeave(): void {
+    console.log('resetting produto');
     this.store.dispatch(ProdutoActions.resetCurrentProduto());
   }
 

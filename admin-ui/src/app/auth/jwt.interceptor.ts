@@ -19,10 +19,9 @@ export class AuthJwtInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     let token: string | null = null;
     this.store
-      .select((state) => { console.log('state', state); return state.auth.token })
-      .subscribe((authToken) => { console.log('authToken', authToken); token = authToken });
+      .select((state) => state.auth.token)
+      .subscribe((authToken) => token = authToken);
 
-    console.log('token', token);
     if (token) {
       request = request.clone({
         setHeaders: {

@@ -3,8 +3,11 @@ import { ProdutoFormComponent } from './produto-form.component';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { AlertController, ToastController } from '@ionic/angular';
+import { AlertController, IonicModule, ToastController } from '@ionic/angular';
 import { of } from 'rxjs';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { IProduto } from '../../models/produto';
 
 describe('ProdutoFormComponent', () => {
     let component: ProdutoFormComponent;
@@ -13,16 +16,31 @@ describe('ProdutoFormComponent', () => {
     let alertController: jasmine.SpyObj<AlertController>;
     let toastController: jasmine.SpyObj<ToastController>;
     const mockActivatedRoute = { params: of({ id: '123' }) };
-    
+
     beforeEach(async () => {
+        const storeMock = jasmine.createSpyObj('Store', ['select', 'dispatch']);
+        storeMock.select.and.returnValue(of(null));
+        
+        const alertMock = {
+            present: jasmine.createSpy('present'),
+            onDidDismiss: jasmine.createSpy('onDidDismiss').and.returnValue(Promise.resolve({ data: true }))
+        };
+        const alertControllerMock = jasmine.createSpyObj('AlertController', ['create']);
+        alertControllerMock.create.and.returnValue(Promise.resolve(alertMock));
+        
         await TestBed.configureTestingModule({
             declarations: [ProdutoFormComponent],
-            imports: [ReactiveFormsModule],
+            imports: [
+                IonicModule,
+                ReactiveFormsModule,
+                MatFormFieldModule,
+                MatInputModule,
+            ],
             providers: [
                 FormBuilder,
                 { provide: ActivatedRoute, useValue: mockActivatedRoute },
-                { provide: Store, useValue: jasmine.createSpyObj('Store', ['select', 'dispatch']) },
-                { provide: AlertController, useValue: jasmine.createSpyObj('AlertController', ['create']) },
+                { provide: Store, useValue: storeMock },
+                { provide: AlertController, useValue: alertControllerMock },
                 { provide: ToastController, useValue: jasmine.createSpyObj('ToastController', ['create']) }
             ]
         }).compileComponents();
@@ -42,12 +60,24 @@ describe('ProdutoFormComponent', () => {
         expect(component.produtoForm).toBeDefined();
     });
     
-    it('should dispatch loadProduto action when a product ID is provided in route params', () => {
-        component.ngOnInit();
+    it('should dispatch updateProduto action when a current product is set', () => {
+        component.currentProduto = {
+            id: '123',
+            nome: 'string',
+            tipo: 'string',
+            insumoId: 'string',
+            insumoNome: 'string',
+            quantidadeEstoque: 123,
+            dataProducao: 'string',
+            dataValidade: 'string',
+            quantidadeLote: 123,
+        };
+        component.onSubmit();
         expect(store.dispatch).toHaveBeenCalledWith(jasmine.objectContaining({
-            type: '[Produto] Load Produto'
+            type: '[Produto] Update Produto'
         }));
     });
+    
     
     it('should dispatch resetCurrentProduto action on ionViewDidLeave', () => {
         component.ionViewDidLeave();
@@ -71,4 +101,52 @@ describe('ProdutoFormComponent', () => {
             type: '[Produto] Create Produto'
         }));
     });
+    
+    it('should reset the form when currentProduto is null', () => {
+        store.select.and.returnValue(of(null));
+        component.ngOnInit();
+        expect(component.produtoForm.pristine).toBeTruthy();
+    });
+    
+    it('should patch the form with product values when currentProduto is provided', () => {
+        const mockProduct: IProduto = {
+            id: '123',
+            nome: 'string',
+            tipo: 'string',
+            insumoId: 'string',
+            insumoNome: 'string',
+            quantidadeEstoque: 123,
+            dataProducao: 'string',
+            dataValidade: 'string',
+            quantidadeLote: 123,
+        };
+        store.select.and.returnValue(of(mockProduct)); // Mock returning a product for currentProduto
+        component.ngOnInit();
+        expect(component.produtoForm.value).toEqual(mockProduct);
+    });
+    
+    it('should dispatch updateProduto action when a current product is set', () => {
+        component.currentProduto = {
+            id: '123',
+            nome: 'string',
+            tipo: 'string',
+            insumoId: 'string',
+            insumoNome: 'string',
+            quantidadeEstoque: 123,
+            dataProducao: 'string',
+            dataValidade: 'string',
+            quantidadeLote: 123,
+        };
+        component.onSubmit();
+        expect(store.dispatch).toHaveBeenCalledWith(jasmine.objectContaining({
+            type: '[Produto] Update Produto'
+        }));
+    });
+    
+    it('should show alert on canDeactivate when form is dirty', async () => {
+        component.produtoForm.markAsDirty();
+        const canDeactivate = await component.canDeactivate();
+        expect(alertController.create).toHaveBeenCalled();
+    });
+    
 });
