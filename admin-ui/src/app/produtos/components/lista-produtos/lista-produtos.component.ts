@@ -1,22 +1,22 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-
 import * as ProdutoReducer from '../../store/produto.reducer';
 import * as ProdutoActions from '../../store/produto.actions';
 import * as ProdutoSelectors from '../../store/produto.selectors'; 
 import { AlertController, LoadingController, ViewDidEnter, ViewDidLeave } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { IProduto } from '../../models/produto';
 
 @Component({
   selector: 'app-lista-produtos',
   templateUrl: './lista-produtos.component.html',
   styleUrls: ['lista-produtos.component.scss']
 })
-export class ListaProdutosComponent implements AfterViewInit, ViewDidEnter, ViewDidLeave {
+export class ListaProdutosComponent implements AfterViewInit, OnDestroy, ViewDidEnter, ViewDidLeave {
 
-  public produtos$: Observable<any[]>;
+  public produtos$: Observable<IProduto[]>;
   public isLoading$: Observable<boolean>;
   public loadingElement: any;
   private subscriptions: Subscription[] = [];
@@ -37,16 +37,25 @@ export class ListaProdutosComponent implements AfterViewInit, ViewDidEnter, View
   }
 
   ngAfterViewInit(): void {
-    this.isLoading$.subscribe(async isLoading => {
-      if(!this.loadingElement) {
-        return;
-      }
-      if (isLoading) {
-        await this.loadingElement.present();
-      } else {
-        await this.loadingElement.dismiss();
-      }
+    this.subscriptions.push(
+      this.isLoading$.subscribe(async isLoading => {
+        if(!this.loadingElement) {
+          return;
+        }
+        if (isLoading) {
+          await this.loadingElement.present();
+        } else {
+          await this.loadingElement.dismiss();
+        }
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(subscription => {
+      subscription.unsubscribe();
     });
+    this.subscriptions = [];
   }
 
   ionViewDidEnter(): void {
@@ -55,10 +64,6 @@ export class ListaProdutosComponent implements AfterViewInit, ViewDidEnter, View
 
   ionViewDidLeave(): void {
     this.store.dispatch(ProdutoActions.resetCurrentProduto());
-    this.subscriptions.forEach(subscription => {
-      subscription.unsubscribe();
-    });
-    this.subscriptions = [];
   }
 
   onRefresh(): void {

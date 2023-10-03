@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import * as ProdutoActions from '../../store/produto.actions';
-import { AlertController, ToastController, ViewDidEnter, ViewDidLeave } from '@ionic/angular';
+import { AlertController, ToastController, ViewDidLeave } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, CanDeactivate } from '@angular/router';
 import { IProduto } from '../../models/produto';
@@ -14,7 +14,7 @@ import * as ProdutoReducer from '../../store/produto.reducer';
   templateUrl: './produto-form.component.html',
   styleUrls: ['./produto-form.component.scss']
 })
-export class ProdutoFormComponent implements ViewDidEnter, CanDeactivate<ProdutoFormComponent>, ViewDidLeave {
+export class ProdutoFormComponent implements OnInit, OnDestroy, CanDeactivate<ProdutoFormComponent>, ViewDidLeave {
 
   public produtoForm: FormGroup;
   public currentProduto: IProduto|null = null;
@@ -40,22 +40,12 @@ export class ProdutoFormComponent implements ViewDidEnter, CanDeactivate<Produto
     });
   }
 
-  ionViewDidEnter(): void {
-    this.subscriptions.push(
-      this.route.params.subscribe(params => {
-        const produtoId = params['id'];
-        if (produtoId) {
-          this.loadProduto(produtoId);
-        }
-      })
-    );
-    
+  ngOnInit(): void {
     this.subscriptions.push(
       this.store.select(ProdutoSelectors.selectCurrentProduto).pipe(
       ).subscribe(produto => {
         this.submitting = false;
         this.currentProduto = produto ?? null;
-        console.log('select currentProduto', this.currentProduto)
         if (produto) {
           this.produtoForm.patchValue(produto);
         } else {
@@ -72,14 +62,26 @@ export class ProdutoFormComponent implements ViewDidEnter, CanDeactivate<Produto
         }
       })
     );
+
+    this.subscriptions.push(
+      this.route.params.subscribe(params => {
+        const produtoId = params['id'];
+        if (produtoId) {
+          this.loadProduto(produtoId);
+        }
+      })
+    );
   }
 
-  ionViewDidLeave(): void {
-    this.store.dispatch(ProdutoActions.resetCurrentProduto());
+  ngOnDestroy(): void {
     this.subscriptions.forEach(subscription => {
       subscription.unsubscribe();
     });
     this.subscriptions = [];
+  }
+
+  ionViewDidLeave(): void {
+    this.store.dispatch(ProdutoActions.resetCurrentProduto());
   }
 
   async canDeactivate(): Promise<boolean> {
@@ -113,7 +115,6 @@ export class ProdutoFormComponent implements ViewDidEnter, CanDeactivate<Produto
   }
 
   onSubmit(): void {
-    console.log('is there currentproduto', this.currentProduto)
     if (this.submitting) {
       this.presentToast('Por favor, aguarde');
       return;
@@ -122,6 +123,7 @@ export class ProdutoFormComponent implements ViewDidEnter, CanDeactivate<Produto
       this.presentToast('Por favor, revise os campos');
       return;
     }
+
     this.submitting = true;
     const produtoData = this.produtoForm.value;
     if (this.currentProduto) {
