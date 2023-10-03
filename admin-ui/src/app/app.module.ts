@@ -6,12 +6,14 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { StoreModule } from '@ngrx/store';
 
 import * as fromRoot from './store/reducers';
 import { EffectsModule } from '@ngrx/effects';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AuthJwtInterceptor } from './auth/jwt.interceptor';
+
 
 @NgModule({
   declarations: [AppComponent],
@@ -20,7 +22,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     IonicModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
-    StoreModule.forRoot(fromRoot.reducers),
+    StoreModule.forRoot(fromRoot.reducers, { metaReducers: fromRoot.metaReducers }),
     EffectsModule.forRoot([]),
     BrowserAnimationsModule
   ],
@@ -28,7 +30,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     {
       provide: RouteReuseStrategy,
       useClass: IonicRouteStrategy
-    }
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthJwtInterceptor,
+      multi: true,
+    },
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
