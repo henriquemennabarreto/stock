@@ -13,12 +13,15 @@ describe('LoginComponent', () => {
     let fixture: ComponentFixture<LoginComponent>;
     let mockStore: jasmine.SpyObj<Store>;
     let mockToastController: jasmine.SpyObj<ToastController>;
-    let mockAuthEffects: jasmine.SpyObj<AuthEffects>;
+
+    const mockAuthEffects = {
+        loginSuccessNotification: jasmine.createSpy('loginSuccessNotification').and.returnValue(of(null)), 
+        loginFailureNotification: jasmine.createSpy('loginFailureNotification').and.returnValue(of({error: 'Error'}))
+    };
 
     beforeEach(() => {
         mockStore = jasmine.createSpyObj('Store', ['dispatch']);
         mockToastController = jasmine.createSpyObj('ToastController', ['create']);
-        mockAuthEffects = jasmine.createSpyObj('AuthEffects', ['loginSuccessNotification', 'loginFailureNotification']);
         
         mockToastController.create.and.returnValue(Promise.resolve({
             present: jasmine.createSpy('present')
@@ -35,7 +38,7 @@ describe('LoginComponent', () => {
             providers: [
                 { provide: Store, useValue: mockStore },
                 { provide: ToastController, useValue: mockToastController },
-                { provide: AuthEffects, useValue: mockAuthEffects }
+                { provide: AuthEffects, useValue: mockAuthEffects },
             ]
         }).compileComponents();
 

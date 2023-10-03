@@ -37,8 +37,7 @@ export class ProdutoFormComponent implements OnInit, OnDestroy, CanDeactivate<Pr
 
   ngOnInit(): void {
     this.subscriptions.push(
-      this.store.select(ProdutoSelectors.selectCurrentProduto).pipe(
-      ).subscribe(produto => {
+      this.store.select(ProdutoSelectors.selectCurrentProduto).subscribe(produto => {
         console.log('loadedproduto', produto)
         this.submitting = false;
         this.currentProduto = produto || null;
@@ -51,7 +50,7 @@ export class ProdutoFormComponent implements OnInit, OnDestroy, CanDeactivate<Pr
     );
   
     this.subscriptions.push(
-      this.store.pipe(select(ProdutoSelectors.selectError)).subscribe(failure => {
+      this.store.select(ProdutoSelectors.selectError).subscribe(failure => {
         if (failure) {
           this.submitting = false;
           this.presentToast('Ocorreu um erro ao criar o produto.');
