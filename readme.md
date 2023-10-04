@@ -74,13 +74,8 @@ curl -X DELETE http://localhost:3000/users/1
 
 ### Login
 ```bash
-curl --request POST \
-  --url http://localhost:3000/users/login \
-  --header 'Content-Type: application/json' \
-  --data '{
-	"email": "john.doe@example.com",
-  "password": "secret123"
-}'
+curl --request GET \
+  --url http://localhost:3000/google
 ```
 
 ### Estoque
