@@ -27,7 +27,7 @@ app.use(stockRoutes);
 
 // Rota de teste
 app.get('/', (req, res) => {
-  res.send('API funcionando!');
+  res.send('Usuário não logado.');
 });
 
 // Iniciar o servidor

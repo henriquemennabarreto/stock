@@ -13,6 +13,17 @@ const AuthController = {
     }
   },
 
+  callback: async (req, res) => {
+    try {
+      passport.authenticate('google', {
+        successRedirect: '/success',
+        failureRedirect: '/failed'
+      })
+    } catch (error) {
+      res.status(500).json({ message: "Erro ao gerar o token.", error });
+    }
+  },
+
   hasActiveLogin: async (req, res, next) => {
     try {
       if (req.user) {
