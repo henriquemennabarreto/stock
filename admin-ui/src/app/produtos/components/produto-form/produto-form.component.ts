@@ -38,7 +38,6 @@ export class ProdutoFormComponent implements OnInit, OnDestroy, CanDeactivate<Pr
   ngOnInit(): void {
     this.subscriptions.push(
       this.store.select(ProdutoSelectors.selectCurrentProduto).subscribe(produto => {
-        console.log('loadedproduto', produto)
         this.submitting = false;
         this.currentProduto = produto || null;
         if (produto) {
@@ -62,7 +61,6 @@ export class ProdutoFormComponent implements OnInit, OnDestroy, CanDeactivate<Pr
       this.route.params.subscribe(params => {
         const produtoId = params['id'];
         if (produtoId) {
-          console.log('loadproduto', produtoId)
           this.loadProduto(produtoId);
         }
       })
@@ -77,7 +75,6 @@ export class ProdutoFormComponent implements OnInit, OnDestroy, CanDeactivate<Pr
   }
 
   ionViewDidLeave(): void {
-    console.log('resetting produto');
     this.store.dispatch(ProdutoActions.resetCurrentProduto());
   }
 

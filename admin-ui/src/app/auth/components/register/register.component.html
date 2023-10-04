@@ -4,7 +4,7 @@
         <ion-menu-button></ion-menu-button>
       </ion-buttons>
       <ion-title>
-        Register
+        Cadastro
       </ion-title>
     </ion-toolbar>
   </ion-header>
@@ -40,12 +40,22 @@
           </ion-card-content>
         </ion-card>
         
-        <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="0.5rem">
+        <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap=".5rem">
           <ion-button color="light" routerLink="/auth/login">
             Já possuo conta
           </ion-button>
           <ion-button color="primary" type="submit" [disabled]="registerForm.invalid || registerForm.pristine || submitting">
             Criar conta
+          </ion-button>
+        </div>
+        
+        <div class="inset-shadow-line"></div>
+
+        <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap=".5rem">
+          <ion-text color="medium" size="small">Alternativamente, você pode:</ion-text>
+          <ion-button color="primary" type="button" (click)="loginWithGoogle()">
+            <ion-icon name="logo-google" slot="start"></ion-icon>
+            Entrar com Google
           </ion-button>
         </div>
       </form>
