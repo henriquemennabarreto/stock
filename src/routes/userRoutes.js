@@ -3,11 +3,6 @@ const router = express.Router();
 const userController = require('../controllers/userController');
 const authController = require('../controllers/authController');
 
-// Rota para logar
-router.get('/google', authController.login);
-
-router.get('/google/callback', authController.callback);
-
 router.get('/logout', authController.logout);
 
 router.get('/success', authController.hasActiveLogin, authController.success);
