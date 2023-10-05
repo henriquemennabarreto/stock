@@ -87,7 +87,6 @@ export class RegisterComponent implements OnDestroy {
       message: message,
       duration: 2000,
       position: 'top',
-      color: 'danger',
     });
     toast.present();
   }

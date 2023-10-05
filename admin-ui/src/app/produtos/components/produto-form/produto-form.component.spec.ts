@@ -9,6 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
+import { ProdutoEffects } from '../../store/produto.effects';
 
 describe('ProdutoFormComponent', () => {
     let component: ProdutoFormComponent;
@@ -37,6 +38,13 @@ describe('ProdutoFormComponent', () => {
         params: of({id: 'testId'})
     };
     
+    const mockProdutoEffects = {
+        createProdutoSuccessNotification: jasmine.createSpy('createProdutoSuccessNotification').and.returnValue(of(null)), 
+        createProdutoFailureNotification: jasmine.createSpy('createProdutoFailureNotification').and.returnValue(of({error: 'Error'})),
+        updateProdutoSuccessNotification: jasmine.createSpy('updateProdutoSuccessNotification').and.returnValue(of(null)), 
+        updateProdutoFailureNotification: jasmine.createSpy('updateProdutoFailureNotification').and.returnValue(of({error: 'Error'}))
+    };
+
     beforeEach(async () => {
         await TestBed.configureTestingModule({
             declarations: [ProdutoFormComponent],
@@ -55,6 +63,7 @@ describe('ProdutoFormComponent', () => {
                 { provide: ActivatedRoute, useValue: mockActivatedRoute },
                 { provide: NgxMaskDirective, useValue: NgxMaskDirective },
                 { provide: NgxMaskPipe, useValue: NgxMaskPipe },
+                { provide: ProdutoEffects, useValue: mockProdutoEffects },
             ]
         }).compileComponents();
     });
@@ -97,7 +106,6 @@ describe('ProdutoFormComponent', () => {
             message: 'Por favor, revise os campos',
             duration: 2000,
             position: 'top',
-            color: 'danger'
         });
     });
     

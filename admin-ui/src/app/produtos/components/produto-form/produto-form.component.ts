@@ -55,7 +55,7 @@ export class ProdutoFormComponent implements OnInit, OnDestroy, CanDeactivate<Pr
       this.store.select(ProdutoSelectors.selectError).subscribe(error => {
         if (error) {
           this.submitting = false;
-          // this.presentToast('Ocorreu um erro ao criar o produto.');
+          this.presentToast('Ocorreu um erro ao criar o produto.');
         }
       })
     );
@@ -163,7 +163,6 @@ export class ProdutoFormComponent implements OnInit, OnDestroy, CanDeactivate<Pr
       message: message,
       duration: 2000,
       position: 'top',
-      color: 'danger'
     });
     toast.present();
   }  
