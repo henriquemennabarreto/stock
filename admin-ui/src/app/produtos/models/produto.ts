@@ -18,8 +18,10 @@ export interface IUpdateProdutoRequest {
     quantity?: number;
 }
 
-export interface ICreateProdutoResponse extends IProduto {
+export interface ICreateProdutoResponse {
+    item: IProduto;
 }
 
-export interface IUpdateProdutoResponse extends IProduto {
+export interface IUpdateProdutoResponse {
+    message: string;
 }

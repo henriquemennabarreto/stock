@@ -73,6 +73,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       message: message,
       duration: 2000,
       position: 'top',
+      color: 'primary',
     });
     toast.present();
   }

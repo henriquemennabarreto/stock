@@ -20,7 +20,7 @@ export const createProduto = createAction(
 
 export const createProdutoSuccess = createAction(
     '[Produto] Create Produto Success',
-    props<{ produto: ICreateProdutoResponse }>()
+    props<{ produto: IProduto }>()
 );
 
 export const createProdutoFailure = createAction(
@@ -34,8 +34,7 @@ export const updateProduto = createAction(
 );
 
 export const updateProdutoSuccess = createAction(
-    '[Produto] Update Produto Success',
-    props<{ produto: IUpdateProdutoResponse }>()
+    '[Produto] Update Produto Success'
 );
 
 export const updateProdutoFailure = createAction(

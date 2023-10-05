@@ -22,7 +22,7 @@ export function logger(reducer: ActionReducer<State>): ActionReducer<State> {
 
 export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
   return localStorageSync({
-    keys: ['produto', 'auth'],
+    keys: ['auth'],
     rehydrate: true
   })(reducer);
 }

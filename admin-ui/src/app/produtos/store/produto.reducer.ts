@@ -46,9 +46,8 @@ const produtoReducer = createReducer(
     currentProduto: produto
   })),
 
-  on(ProdutoActions.updateProdutoSuccess, (state, { produto }) => ({
+  on(ProdutoActions.updateProdutoSuccess, (state) => ({
     ...state,
-    currentProduto: produto
   })),
 
   on(ProdutoActions.startLoading, state => ({

@@ -8,26 +8,29 @@
           </ion-list-header>
           <ion-note>Painel Administrativo</ion-note>
 
-          <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
-            <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" routerLinkActive="selected">
-              <ion-icon aria-hidden="true" slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
-              <ion-label>{{ p.title }}</ion-label>
-            </ion-item>
-          </ion-menu-toggle>
-
           <ng-container *ngIf="authState$ | async as authState">
             <ng-container *ngIf="!authState.token; else loggedInBlock">
-              <ion-item routerDirection="root" lines="none" detail="false" routerLinkActive="selected" routerLink="/auth/login">
-                <ion-icon aria-hidden="true" slot="start" ios="log-in-outline" md="log-in-sharp"></ion-icon>
-                <ion-label>Entrar</ion-label>
-              </ion-item>
+              <ion-menu-toggle auto-hide="false">
+                <ion-item routerDirection="root" lines="none" detail="false" routerLinkActive="selected" routerLink="/auth/login">
+                  <ion-icon aria-hidden="true" slot="start" ios="log-in-outline" md="log-in-sharp"></ion-icon>
+                  <ion-label>Entrar</ion-label>
+                </ion-item>
+              </ion-menu-toggle>
             </ng-container>
 
             <ng-template #loggedInBlock>
-              <ion-item routerDirection="root" lines="none" detail="false" routerLinkActive="selected" (click)="logout()">
-                <ion-icon aria-hidden="true" slot="start" ios="log-out-outline" md="log-out-sharp"></ion-icon>
-                <ion-label>Sair</ion-label>
-              </ion-item>
+              <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
+                <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" routerLinkActive="selected">
+                  <ion-icon aria-hidden="true" slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
+                  <ion-label>{{ p.title }}</ion-label>
+                </ion-item>
+              </ion-menu-toggle>
+              <ion-menu-toggle auto-hide="false">
+                <ion-item routerDirection="root" lines="none" detail="false" routerLinkActive="selected" (click)="logout()">
+                  <ion-icon aria-hidden="true" slot="start" ios="log-out-outline" md="log-out-sharp"></ion-icon>
+                  <ion-label>Sair</ion-label>
+                </ion-item>
+              </ion-menu-toggle>
             </ng-template>
           </ng-container>
         </ion-list>

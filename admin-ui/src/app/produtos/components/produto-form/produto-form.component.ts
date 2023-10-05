@@ -9,6 +9,7 @@ import { IProduto } from '../../models/produto';
 import * as ProdutoSelectors from '../../store/produto.selectors';
 import * as ProdutoReducer from '../../store/produto.reducer';
 import { ProdutoEffects } from '../../store/produto.effects';
+import { formatCurrency } from '@angular/common';
 
 
 @Component({
@@ -44,7 +45,12 @@ export class ProdutoFormComponent implements OnInit, OnDestroy, CanDeactivate<Pr
         this.submitting = false;
         this.currentProduto = produto || null;
         if (produto) {
-          this.produtoForm.patchValue(produto);
+          console.log('produto', produto)
+          this.produtoForm.patchValue({
+            name: produto.name,
+            price: produto.price.toString().replace('.',','),
+            quantity: produto.quantity
+          });
         } else {
           this.produtoForm.reset();
         }
@@ -55,7 +61,6 @@ export class ProdutoFormComponent implements OnInit, OnDestroy, CanDeactivate<Pr
       this.store.select(ProdutoSelectors.selectError).subscribe(error => {
         if (error) {
           this.submitting = false;
-          this.presentToast('Ocorreu um erro ao criar o produto.');
         }
       })
     );
@@ -163,6 +168,7 @@ export class ProdutoFormComponent implements OnInit, OnDestroy, CanDeactivate<Pr
       message: message,
       duration: 2000,
       position: 'top',
+      color: 'primary',
     });
     toast.present();
   }  
