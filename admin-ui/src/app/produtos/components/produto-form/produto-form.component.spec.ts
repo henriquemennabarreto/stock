@@ -106,6 +106,7 @@ describe('ProdutoFormComponent', () => {
             message: 'Por favor, revise os campos',
             duration: 2000,
             position: 'top',
+            color: 'primary'
         });
     });
     
