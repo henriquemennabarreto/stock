@@ -7,18 +7,13 @@ const SECRET = '448a852ec16449869e0101fa7ea9e0ad';
 
 const AuthController = {
 
-  generateToken: async (req, res) => {
+  login: async (req, res) => {
     try {
-      const { email, password } = req.body;
+      const { email } = req.body;
 
       const user = await UserModel.getUserByEmail(email);
       if (!user) {
         return res.status(404).json({ message: "Usuário não encontrado." });
-      }
-
-      const passwordIsValid = await bcrypt.compare(password, user.password);
-      if (!passwordIsValid) {
-        return res.status(401).json({ message: "Senha inválida." });
       }
 
       const token = jwt.sign({ id: user.id }, SECRET, {

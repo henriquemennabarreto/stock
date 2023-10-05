@@ -37,7 +37,10 @@ npm start
 ### Login
 ```bash
 curl --request GET \
-  --url http://localhost:3000/google
+  --url http://localhost:3000/users/login \
+  --data '{
+    "email": "teste@email.com"
+  }'
 ```
 
 ### Usuário

@@ -3,6 +3,8 @@ const router = express.Router();
 const userController = require('../controllers/userController');
 const authController = require('../controllers/authController');
 
+router.post('/users/login', authController.login);
+
 router.get('/logout', authController.logout);
 
 router.get('/success', authController.hasActiveLogin, authController.success);
