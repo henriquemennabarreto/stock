@@ -144,4 +144,16 @@ export class AuthEffects {
     );
   }
 
+  getGoogleJwt$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.getGoogleJwt),
+      switchMap((action) =>
+        this.authService.getGoogleJwt({ email: action.email }).pipe(
+          map((response) => AuthActions.loginSuccess({ token: response.token })),
+          catchError((error: HttpErrorResponse) => of(AuthActions.loginFailure({ error: error?.error?.message })))
+        )
+      )
+    )
+  );
+
 }

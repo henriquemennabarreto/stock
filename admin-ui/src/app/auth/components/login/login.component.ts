@@ -77,10 +77,12 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
     toast.present();
   }
-  
+
   async loginWithGoogle() {
-    let googleUser = await GoogleAuth.signIn();
-    console.log(googleUser);
+    let gUser = await GoogleAuth.signIn();
+    if(gUser?.email && gUser?.authentication?.accessToken) {
+      this.store.dispatch(AuthActions.getGoogleJwt({ email: gUser.email }));
+    }
   }
 
   public signOut(){

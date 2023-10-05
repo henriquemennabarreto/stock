@@ -91,3 +91,8 @@ export const getUserFailure = createAction(
   '[User] Get User Failure',
   props<{ error: any }>()
 );
+
+export const getGoogleJwt = createAction(
+  '[Auth] Get Google JWT',
+  props<{ email: string }>()
+);

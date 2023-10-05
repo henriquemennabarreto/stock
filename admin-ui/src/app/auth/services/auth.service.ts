@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ICreateUserRequest, ICreateUserResponse, IUpdateUserRequest, IUpdateUserResponse, IUser } from '../models/user';
-import { ILoginRequest, ILoginResponse } from '../models/auth';
+import { IGoogleJwtRequest, ILoginRequest, ILoginResponse } from '../models/auth';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +33,10 @@ export class AuthService {
   }
 
   loginUser(data: ILoginRequest): Observable<ILoginResponse> {
+    return this.http.post<any>(`${environment.apiUrl}/users/login`, data);
+  }
+
+  getGoogleJwt(data: IGoogleJwtRequest): Observable<ILoginResponse> {
     return this.http.post<any>(`${environment.apiUrl}/users/login`, data);
   }
 }

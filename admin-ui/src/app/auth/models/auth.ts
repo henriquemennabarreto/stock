@@ -20,3 +20,7 @@ export interface IRegisterResponse extends ICreateUserResponse {
     email: string;
     created_at: string;
 }
+
+export interface IGoogleJwtRequest {
+    email: string;
+}
