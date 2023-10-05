@@ -7,6 +7,7 @@ import * as AuthActions from 'src/app/auth/store/auth.actions';
 import { Platform } from '@ionic/angular';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import { environment } from 'src/environments/environment';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -20,13 +21,18 @@ export class AppComponent {
   
   authState$: Observable<AuthState>;
 
-  constructor(private store: Store<fromRoot.State>, private platform: Platform) {
+  constructor(
+    private store: Store<fromRoot.State>,
+    private platform: Platform,
+    private router: Router
+  ) {
     this.authState$ = this.store.select('auth');
     this.initializeApp();
   }
 
   public logout(): void {
     this.store.dispatch(AuthActions.logout());
+    this.router.navigate(['/auth/login']);
   }
 
   initializeApp() {

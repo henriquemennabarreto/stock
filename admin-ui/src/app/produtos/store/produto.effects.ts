@@ -42,6 +42,22 @@ export class ProdutoEffects {
       catchError(error => of(ProdutoActions.createProdutoFailure({ error })))
     ))
   ));
+
+  createProdutoSuccessNotification() {
+    return this.actions$.pipe(
+      ofType(ProdutoActions.createProdutoSuccess),
+      tap(() => {
+      })
+    );
+  }
+
+  createProdutoFailureNotification() {
+    return this.actions$.pipe(
+      ofType(ProdutoActions.createProdutoFailure),
+      tap(() => {
+      })
+    );
+  }
   
   updateProduto$ = createEffect(() => this.actions$.pipe(
     ofType(ProdutoActions.updateProduto),
@@ -51,6 +67,22 @@ export class ProdutoEffects {
       catchError(error => of(ProdutoActions.updateProdutoFailure({ error })))
     ))
   ));  
+
+  updateProdutoSuccessNotification() {
+    return this.actions$.pipe(
+      ofType(ProdutoActions.updateProdutoSuccess),
+      tap(() => {
+      })
+    );
+  }
+
+  updateProdutoFailureNotification() {
+    return this.actions$.pipe(
+      ofType(ProdutoActions.updateProdutoFailure),
+      tap(() => {
+      })
+    );
+  }
   
   deleteProduto$ = createEffect(() => this.actions$.pipe(
     ofType(ProdutoActions.deleteProduto),
@@ -63,6 +95,5 @@ export class ProdutoEffects {
         catchError(error => of(ProdutoActions.deleteProdutoFailure({ error })))
       ))
   ));
-
 
 }

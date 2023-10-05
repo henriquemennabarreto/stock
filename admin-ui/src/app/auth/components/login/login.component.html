@@ -14,6 +14,9 @@
       
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <ion-card>
+          <ion-card-header>
+            <ion-card-title>Entrar com credenciais</ion-card-title>
+          </ion-card-header>
           <ion-card-content fxLayout="column" fxLayoutAlign="center wrap" fxLayoutGap=".5rem">
             <mat-form-field appearance="outline">
               <mat-label>E-mail</mat-label>
@@ -24,23 +27,23 @@
               <mat-label>Senha</mat-label>
               <input matInput formControlName="password" type="password">
             </mat-form-field>
+        
+            <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="0.5rem">
+              <!-- <ion-button color="light" routerLink="/auth/register">
+                Cadastre-se
+              </ion-button> -->
+              <ion-button color="primary" type="submit" [disabled]="loginForm.invalid || loginForm.pristine">
+                Entrar
+              </ion-button>
+            </div>
           </ion-card-content>
         </ion-card>
-        
-        <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="0.5rem">
-          <ion-button color="light" routerLink="/auth/register">
-            Cadastre-se
-          </ion-button>
-          <ion-button color="primary" type="submit" [disabled]="loginForm.invalid || loginForm.pristine">
-            Entrar
-          </ion-button>
-        </div>
 
         <div class="inset-shadow-line"></div>
 
         <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap=".5rem">
           <ion-text color="medium" size="small">Alternativamente, você pode:</ion-text>
-          <ion-button color="primary" type="button" (click)="loginWithGoogle()">
+          <ion-button color="danger" type="button" (click)="loginWithGoogle()">
             <ion-icon name="logo-google" slot="start"></ion-icon>
             Entrar com Google
           </ion-button>

@@ -7,7 +7,6 @@ import { Subscription } from 'rxjs';
 import { AlertController, ToastController } from '@ionic/angular';
 import { AuthEffects } from '../../store/auth.effects';
 import { Router } from '@angular/router';
-import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 
 @Component({
   selector: 'app-register',
@@ -104,14 +103,5 @@ export class RegisterComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
-  }
-  
-  async loginWithGoogle() {
-    let googleUser = await GoogleAuth.signIn();
-    console.log(googleUser);
-  }
-
-  public signOut(){
-    GoogleAuth.signOut();
   }
 }

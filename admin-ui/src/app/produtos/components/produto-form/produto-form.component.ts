@@ -8,6 +8,8 @@ import { ActivatedRoute, CanDeactivate } from '@angular/router';
 import { IProduto } from '../../models/produto';
 import * as ProdutoSelectors from '../../store/produto.selectors';
 import * as ProdutoReducer from '../../store/produto.reducer';
+import { ProdutoEffects } from '../../store/produto.effects';
+
 
 @Component({
   selector: 'app-produto-form',
@@ -27,6 +29,7 @@ export class ProdutoFormComponent implements OnInit, OnDestroy, CanDeactivate<Pr
     private toastController: ToastController,
     private route: ActivatedRoute,
     private alertController: AlertController,
+    private produtoEffects: ProdutoEffects
   ) {
     this.produtoForm = this.formBuilder.group({
       name: ['', Validators.required],
@@ -49,11 +52,39 @@ export class ProdutoFormComponent implements OnInit, OnDestroy, CanDeactivate<Pr
     );
   
     this.subscriptions.push(
-      this.store.select(ProdutoSelectors.selectError).subscribe(failure => {
-        if (failure) {
+      this.store.select(ProdutoSelectors.selectError).subscribe(error => {
+        if (error) {
           this.submitting = false;
-          this.presentToast('Ocorreu um erro ao criar o produto.');
+          // this.presentToast('Ocorreu um erro ao criar o produto.');
         }
+      })
+    );
+  
+    this.subscriptions.push(
+      this.produtoEffects.createProdutoSuccessNotification().subscribe(() => {
+        this.submitting = false;
+        this.presentToast('Produto cadastrado.');
+      })
+    );
+
+    this.subscriptions.push(
+      this.produtoEffects.createProdutoFailureNotification().subscribe(() => {
+        this.submitting = false;
+        this.presentToast('Ocorreu um erro ao cadastrar produto.');
+      })
+    );
+    
+    this.subscriptions.push(
+      this.produtoEffects.updateProdutoSuccessNotification().subscribe(() => {
+        this.submitting = false;
+        this.presentToast('Produto atualizado.');
+      })
+    );
+
+    this.subscriptions.push(
+      this.produtoEffects.updateProdutoFailureNotification().subscribe(() => {
+        this.submitting = false;
+        this.presentToast('Ocorreu um erro ao editar produto.');
       })
     );
 
