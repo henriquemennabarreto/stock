@@ -2,11 +2,15 @@ const express = require('express');
 const passport = require('passport');
 const cookieSession = require('cookie-session');
 require('./passport.js');
+const cors = require('cors')
+
 
 const userRoutes = require('./routes/userRoutes');
 const stockRoutes = require('./routes/stockRoutes');
 
 const app = express();
+
+app.use(cors())
 
 app.use(cookieSession({
   name: 'google-auth-session',
