@@ -3,11 +3,12 @@ const passport = require('passport');
 const cookieSession = require('cookie-session');
 require('./passport.js');
 const cors = require('cors')
-
+const multer = require('multer');
+const redis = require('redis');
+const { promisify } = require('util');
 
 const userRoutes = require('./routes/userRoutes');
 const stockRoutes = require('./routes/stockRoutes');
-const imageRoutes = require('./routes/imageRoutes');
 
 const app = express();
 
@@ -35,6 +36,50 @@ app.get('/google/callback',
   }
 );
 
+let redisClient;
+
+(async () => {
+  redisClient = redis.createClient();
+
+  redisClient.on("error", (error) => console.error(`Error : ${error}`));
+
+  await redisClient.connect();
+})();
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
+app.post('/upload', upload.single('image'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).send('Nenhuma imagem enviada.');
+    }
+
+    // Usando o nome original do arquivo como chave (pode ser necessário adicionar verificações adicionais)
+    await redisClient.set(req.file.originalname, req.file.buffer);
+
+    res.status(200).send('Imagem armazenada com sucesso!');
+  } catch (error) {
+    res.status(500).send('Erro ao armazenar a imagem.');
+  }
+});
+
+app.get('/image/:filename', async (req, res) => {
+  try {
+    const imageData = await redisClient.get(req.params.filename);
+
+    if (!imageData) {
+      return res.status(404).send('Imagem não encontrada.');
+    }
+
+    // Supondo que a imagem é do tipo PNG (ajuste conforme necessário)
+    res.contentType('image/png');
+    res.send(imageData);
+  } catch (error) {
+    res.status(500).send('Erro ao recuperar a imagem.');
+  }
+});
+
 const knex = require('knex');
 const knexConfig = require('./config/knexfile');
 const db = knex(knexConfig);
@@ -43,7 +88,6 @@ app.use(express.json());
 
 app.use(userRoutes);
 app.use(stockRoutes);
-app.use(imageRoutes);
 
 // Rota de teste
 app.get('/', (req, res) => {
