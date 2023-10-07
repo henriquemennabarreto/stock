@@ -7,6 +7,7 @@ const cors = require('cors')
 
 const userRoutes = require('./routes/userRoutes');
 const stockRoutes = require('./routes/stockRoutes');
+const imageRoutes = require('./routes/imageRoutes');
 
 const app = express();
 
@@ -42,6 +43,7 @@ app.use(express.json());
 
 app.use(userRoutes);
 app.use(stockRoutes);
+app.use(imageRoutes);
 
 // Rota de teste
 app.get('/', (req, res) => {
