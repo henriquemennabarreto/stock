@@ -6,6 +6,7 @@ const cors = require('cors')
 const multer = require('multer');
 const redis = require('redis');
 const { promisify } = require('util');
+const base64 = require('node-base64-image');
 
 const userRoutes = require('./routes/userRoutes');
 const stockRoutes = require('./routes/stockRoutes');
@@ -55,8 +56,10 @@ app.post('/upload', upload.single('image'), async (req, res) => {
       return res.status(400).send('Nenhuma imagem enviada.');
     }
 
-    // Usando o nome original do arquivo como chave (pode ser necessário adicionar verificações adicionais)
-    await redisClient.set(req.file.originalname, req.file.buffer);
+    let url = `http://localhost:3000/image/${req.file.originalname}`
+    const image = await base64.encode(url, {string: true});
+    
+    await redisClient.set(req.file.originalname, image);
 
     res.status(200).send('Imagem armazenada com sucesso!');
   } catch (error) {
@@ -72,9 +75,7 @@ app.get('/image/:filename', async (req, res) => {
       return res.status(404).send('Imagem não encontrada.');
     }
 
-    // Supondo que a imagem é do tipo PNG (ajuste conforme necessário)
-    res.contentType('image/png');
-    res.send(imageData);
+    res.json(imageData);
   } catch (error) {
     res.status(500).send('Erro ao recuperar a imagem.');
   }
